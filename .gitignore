@@ -1,6 +1,6 @@
 # generated
 .idea
-nodes_modules
+nodes_modules/
 
 # Client
 # dependencies
