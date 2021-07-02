@@ -2,6 +2,9 @@
 .idea
 node_modules
 
+# Local
+.env
+
 # Client
 # dependencies
 client/node_modules
