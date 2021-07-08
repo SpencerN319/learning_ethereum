@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLINCENSED
+// contracts/Authenticator.sol
+//SPDX-License-Identifier:UNLICENSED
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -15,7 +16,6 @@ contract Authenticator is Ownable {
         kyc = _kyc;
     }
 
-    //TODO create a password and return it
     function requestPassword() public returns(uint256) {
         require(kyc.kycCompleted(msg.sender), "Error: Kyc not completed");
         keys[index] = true;
@@ -24,7 +24,6 @@ contract Authenticator is Ownable {
         return returnIndex;
     }
 
-    //TODO validate the password
     function validatePassword(uint256 _index) public returns(bool){
         require(kyc.kycCompleted(msg.sender), "Error: Kyc not completed");
         require(keys[_index] == true, "Error: Invalid key");
