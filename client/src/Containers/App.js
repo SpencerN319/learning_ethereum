@@ -7,9 +7,10 @@ import Authenticator from '../contracts/Authenticator.json';
 import Kyc from '../contracts/Kyc.json';
 import getWeb3 from '../utils/getWeb3';
 import './App.css';
+import CreateOTP from './CreateOTP';
 
 const App = () => {
-  const [addr, setAddr] = useState(null);
+  const [addr, setAddr] = useState('');
   const [state, setState] = useState({
     web3: null,
     owner: null,
@@ -24,11 +25,10 @@ const App = () => {
         const [owner] = await web3.eth.getAccounts();
         const networkId = await web3.eth.net.getId();
         const authAddress = Authenticator.networks[networkId] && Authenticator.networks[networkId].address;
-        const authContract = new web3.eth.Contract(Authenticator.abi, authAddress);
         const kycAddress = Kyc.networks[networkId] && Kyc.networks[networkId].address;
+        const authContract = new web3.eth.Contract(Authenticator.abi, authAddress);
         const kycContract = new web3.eth.Contract(Kyc.abi, kycAddress);
-        await kycContract.methods.setKycCompleted(owner);
-
+        await kycContract.methods.setKycCompleted(owner).send({from: owner});
         setState({web3, owner, authContract, kycContract});
       };
 
@@ -61,10 +61,12 @@ const App = () => {
             <input type="text" placeholder="Account" onChange={(event) => setAddr(event.target.value)}/>
             <button onClick={() => checkKycCompleteHandler()}>verify</button>
           </div>
+          <div/>
+          <CreateOTP />
         </Fragment>
-    ) : (
-        <div>Loading Web3, accounts, and contract...</div>
-    )}
+      ) : (
+          <div>Loading Web3, accounts, and contract...</div>
+      )}
     </div>
   );
 };
